@@ -26,6 +26,7 @@ class UploadHandler:
             signature=signature,
             status=PDFStatus.INCOMPLETE,
             file_size=file_size)
+        
         try:
             self._ch.insert_pdf_file_upload(pdf_file_upload)
 
@@ -39,15 +40,15 @@ class UploadHandler:
                 file_uuid=pdf_file_upload.uuid,
                 uploaded_at=upload_file,
                 file_name=file_name,
-                file_size=file_size
-            )
+                file_size=file_size)
+            
         except Exception as e:
             response = PDFUploadResponse(
                 file_uuid=pdf_file_upload.uuid,
                 uploaded_at=upload_file,
                 file_name=file_name,
-                file_size=file_size
-            )
+                file_size=file_size)
+            
         return response
             
 
