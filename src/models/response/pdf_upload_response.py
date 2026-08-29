@@ -6,4 +6,4 @@ class PDFUploadResponse(BaseModel):
     uploaded_at: datetime.datetime = datetime.datetime.now()
     file_name: str
     file_size: int
-    
+    error: str = ""

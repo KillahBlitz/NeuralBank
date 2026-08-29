@@ -33,6 +33,12 @@ class PDFFileRepository:
         self.db.refresh(record)
         return record
 
+    def get_pending(self) -> list[PDFFileUploadRecord]:
+        return self.db.query(PDFFileUploadRecord).filter_by(status=PDFStatus.PENDING).all()
+
+    def count_by_signature(self, signature: str) -> int:
+        return self.db.query(PDFFileUploadRecord).filter_by(signature=signature).count()
+
     def update_pdf_file_upload(self, pdf_file_upload: PDFFileUpload):
         record = self.db.query(PDFFileUploadRecord).filter_by(uuid=pdf_file_upload.uuid).first()
         if record:

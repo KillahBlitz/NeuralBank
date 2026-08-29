@@ -22,3 +22,7 @@ def get_streams_client() -> redis.Redis:
 
 def get_cache_client() -> redis.Redis:
     return cache_client
+
+
+def event_producer(stream_name: str, data: dict):
+    streams_client.xadd(stream_name, data)

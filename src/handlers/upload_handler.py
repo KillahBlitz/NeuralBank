@@ -47,7 +47,8 @@ class UploadHandler:
                 file_uuid=pdf_file_upload.uuid,
                 uploaded_at=upload_file,
                 file_name=file_name,
-                file_size=file_size)
+                file_size=file_size,
+                error=str(e))
             
         return response
             

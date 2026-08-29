@@ -1,7 +1,7 @@
 from utils.utils import generate_uuid_with_prefix
 
 from enum import Enum
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 import datetime
 
 
@@ -11,7 +11,7 @@ class PDFStatus(str, Enum):
     COMPLETE = "COMPLETE"
 
 class PDFFileUpload(BaseModel):
-    uuid: str = generate_uuid_with_prefix("PDF")
+    uuid: str = Field(default_factory=lambda: generate_uuid_with_prefix("PDF"))
     upload_at: datetime.datetime
     file_name: str
     signature: str
