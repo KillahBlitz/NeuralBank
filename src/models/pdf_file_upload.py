@@ -17,3 +17,4 @@ class PDFFileUpload(BaseModel):
     signature: str
     status: PDFStatus
     file_size: int
+    pages: int

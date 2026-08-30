@@ -16,3 +16,6 @@ class QueryHandler:
 
     def count_by_signature(self, signature) -> int:
         return self._pdf_file_repository.count_by_signature(signature)
+
+    def get_pdf_by_uuid(self, uuid):
+        return self._pdf_content_repository.get_pdf_by_uuid(uuid)

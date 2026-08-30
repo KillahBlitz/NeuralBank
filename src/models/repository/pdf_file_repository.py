@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, DateTime, Enum as SAEnum
+from sqlalchemy import Column, String, Integer, DateTime, Enum as SAEnum, BigInteger
 
 
 from services.db_conection import Base, SessionLocal
@@ -12,7 +12,8 @@ class PDFFileUploadRecord(Base):
     file_name = Column(String, nullable=False)
     signature = Column(String, nullable=False)
     status = Column(SAEnum(PDFStatus), nullable=False)
-    file_size = Column(Integer, nullable=False)
+    file_size = Column(BigInteger, nullable=False)
+    pages = Column(Integer, nullable=False)
 
 
 class PDFFileRepository:
@@ -27,6 +28,7 @@ class PDFFileRepository:
             signature=pdf_file.signature,
             status=pdf_file.status,
             file_size=pdf_file.file_size,
+            pages=pdf_file.pages,
         )
         self.db.add(record)
         self.db.commit()

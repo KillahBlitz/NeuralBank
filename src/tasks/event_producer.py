@@ -3,12 +3,13 @@ import os
 
 from handlers.query_handler import QueryHandler
 from handlers.command_handler import CommandHandler
+from models.events.image_event import ImageEvent
 from models.pdf_file_upload import PDFStatus
 from services.redis_conection import event_producer
 
 STREAM_NAME = os.getenv("STREAM_IMAGE", "")
 
-POLL_INTERVAL_SECONDS = os.getenv("POLL_INTERVAL_SECONDS", 5)
+POLL_INTERVAL_SECONDS = int(os.getenv("POLL_INTERVAL_SECONDS", 5))
 
 
 class EventProducer:
@@ -31,14 +32,13 @@ class EventProducer:
             record.status = PDFStatus.COMPLETE
             self._ch.update_pdf_file_upload(record)
 
-
     def generate_image_event(self, record):
-        event_producer(STREAM_NAME, {"uuid": record.uuid})
+        image_event = ImageEvent(uuid=record.uuid)
+        event_producer(STREAM_NAME, image_event)
         print(f"Event published to '{STREAM_NAME}' for record {record.uuid}.")
 
 
-
-def run():
+if __name__ == "__main__":
     print("Starting event producer...")
     ep = EventProducer()
     while True:
@@ -49,7 +49,3 @@ def run():
         except Exception as e:
             print(f"Error in event producer: {e}")
         time.sleep(POLL_INTERVAL_SECONDS)
-
-
-if __name__ == "__main__":
-    run()
