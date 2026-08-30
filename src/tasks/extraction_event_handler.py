@@ -1,6 +1,11 @@
 import os
 
 from services.redis_conection import start_redis_consumer
+from handlers.query_handler import QueryHandler
+from handlers.command_handler import CommandHandler
+from handlers.extraction_handler import ExtractionHandler
+from models.events.extraction_event import ExtractionEvent
+
 
 STREAM_NAME = os.getenv("STREAM_EXTRACTION", "")
 GROUP_NAME = os.getenv("CONSUMER_GROUP_EXTRACTION_NAME", "")
@@ -8,8 +13,14 @@ CONSUMER_NAME = os.getenv("EXTRACTION_CONSUMER_NAME", "")
 
 
 class ExtractionHandlerTask:
-    def process_image(self, event):
-        print(f"Evento recibido: {event}")
+    def __init__(self):
+        self._qh = QueryHandler()
+        self._ch = CommandHandler()
+        
+    def text_extraction(self, event):
+        eh = ExtractionHandler(self._qh, self._ch)
+        event = ExtractionEvent(**event)
+        eh.process_text_extraction(event)
 
 
 if __name__ == "__main__":
@@ -18,4 +29,5 @@ if __name__ == "__main__":
     while True:
         event = start_redis_consumer(STREAM_NAME, GROUP_NAME, CONSUMER_NAME)
         if event:
-            task_handler.process_image(event)
+            task_handler.text_extraction(event)
+            print(f"Event received, init process for extraction")

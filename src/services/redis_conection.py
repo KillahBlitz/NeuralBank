@@ -25,8 +25,12 @@ def get_cache_client() -> redis.Redis:
 
 
 def event_producer(stream_name: str, data):
+    import base64
     if hasattr(data, "model_dump"):
-        data = {k: str(v) for k, v in data.model_dump().items()}
+        payload = {}
+        for k, v in data.model_dump().items():
+            payload[k] = base64.b64encode(v).decode() if isinstance(v, bytes) else str(v)
+        data = payload
     streams_client.xadd(stream_name, data)
 
 
