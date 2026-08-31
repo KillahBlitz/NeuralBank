@@ -14,9 +14,11 @@ spec:
       labels:
         app: neuralbank-producer
     spec:
+      imagePullSecrets:
+        - name: ghcr-secret
       containers:
         - name: neuralbank-producer
-          image: ghcr.io/KilahBlitz/NeuralBank:latest
+          image: ghcr.io/killahblitz/neuralbank:latest
           command: ["python", "src/tasks/event_producer.py"]
           envFrom:
             - secretRef:

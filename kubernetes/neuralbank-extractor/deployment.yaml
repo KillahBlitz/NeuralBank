@@ -14,9 +14,11 @@ spec:
       labels:
         app: neuralbank-extractor
     spec:
+      imagePullSecrets:
+        - name: ghcr-secret
       containers:
         - name: neuralbank-extractor
-          image: ghcr.io/KillahBlitz/NeuralBank:latest
+          image: ghcr.io/killahblitz/neuralbank:latest
           command: ["python", "src/tasks/extraction_event_handler.py"]
           envFrom:
             - secretRef:

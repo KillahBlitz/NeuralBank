@@ -14,9 +14,11 @@ spec:
       labels:
         app: neuralbank-api
     spec:
+      imagePullSecrets:
+        - name: ghcr-secret
       containers:
         - name: neuralbank-api
-          image: ghcr.io/KillahBlitz/NeuralBank:latest
+          image: ghcr.io/killahblitz/neuralbank:latest
           command: ["uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
           ports:
             - containerPort: 8000

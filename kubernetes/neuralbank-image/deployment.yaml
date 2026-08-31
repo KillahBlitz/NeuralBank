@@ -14,11 +14,13 @@ spec:
       labels:
         app: neuralbank-image
     spec:
+      imagePullSecrets:
+        - name: ghcr-secret
       containers:
         - name: neuralbank-image
-          image: ghcr.io/KillahBlitz/NeuralBank:latest
+          image: ghcr.io/killahblitz/neuralbank:latest
           command: ["python", "src/tasks/image_event_handler.py"]
           envFrom:
             - secretRef:
                 name: neuralbank-env
-          imagePullPolicy: Alway
+          imagePullPolicy: Always
