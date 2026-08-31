@@ -19,6 +19,7 @@ class ExtractionHandler:
             print(f"==" * 20)
             print(f"Extracted text: {text}")
             print(f"==" * 20)
+            self._ch.update_image_extraction(event.uuid, text)
 
         except Exception as e:
             print(f"Error extracting text from image with UUID: {event.uuid}. Error: {e}")

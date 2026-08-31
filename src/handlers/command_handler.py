@@ -28,3 +28,6 @@ class CommandHandler:
 
     def insert_image_file(self, image: ImageFile):
         return self._image_file_repository.insert_image_file(image)
+
+    def update_image_extraction(self,uuid: str, text: str):
+        return self._image_file_repository.update_image_file(uuid, text)

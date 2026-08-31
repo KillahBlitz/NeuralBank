@@ -34,3 +34,11 @@ class ImageFileRepository:
         self.db.commit()
         self.db.refresh(record)
         return record
+
+    def get_image_file_by_uuid(self, uuid: str) -> ImageFileRecord:
+        return self.db.query(ImageFileRecord).filter(ImageFileRecord.uuid == uuid).first()
+
+    def update_image_file(self, uuid, text) -> None:
+        self.get_image_file_by_uuid(uuid).extraction = text
+        self.db.commit()
+
