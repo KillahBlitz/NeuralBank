@@ -83,7 +83,7 @@ jobs:
 
       - name: Actualizar tag de imagen en manifest
         run: |
-          sed -i "s|image:.*neuralbank:.*|image: ${{ needs.build.outputs.image }}:${{ github.sha }}|" \
+          sed -i "s|image:.*neuralbank:.*|image: ${{ needs.build.outputs.image }}:latest|" \
             kubernetes/${{ matrix.service }}/deployment.yaml
 
       - name: Apply manifest
