@@ -61,9 +61,10 @@ jobs:
             --dry-run=client -o yaml | kubectl apply -f -
           rm .env.neuralbank
 
-  # ─────────────────────────────────────────
-  # FASE 3 — Deploy de los 4 servicios en paralelo
-  # ─────────────────────────────────────────
+      - name: Forzar PYTHONPATH correcto en el secret
+        run: |
+          kubectl patch secret neuralbank-env -p '{"stringData":{"PYTHONPATH":"/app:/app/src"}}'
+
   deploy:
     name: Deploy ${{ matrix.service }}
     needs: [build, sync-env]
