@@ -12,3 +12,4 @@ class ImageFile(BaseModel):
     signature: str
     page_number: int
     uuid_pdf: str
+    extraction: str = ""

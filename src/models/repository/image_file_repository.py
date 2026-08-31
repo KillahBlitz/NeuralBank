@@ -13,6 +13,7 @@ class ImageFileRecord(Base):
     signature = Column(String, nullable=False)
     page_number = Column(Integer, nullable=False)
     uuid_pdf = Column(String, nullable=False)
+    extraction = Column(String, nullable=True)
 
 class ImageFileRepository:
     def __init__(self):
@@ -27,6 +28,7 @@ class ImageFileRepository:
             signature=image_file.signature,
             page_number=image_file.page_number,
             uuid_pdf=image_file.uuid_pdf,
+            extraction=image_file.extraction,
         )
         self.db.add(record)
         self.db.commit()
