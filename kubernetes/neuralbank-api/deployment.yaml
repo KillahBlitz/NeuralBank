@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: neuralbank-api
+  labels:
+    app: neuralbank-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: neuralbank-api
+  template:
+    metadata:
+      labels:
+        app: neuralbank-api
+    spec:
+      containers:
+        - name: neuralbank-api
+          image: ghcr.io/<OWNER>/neuralbank:latest
+          command: ["uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+          ports:
+            - containerPort: 8000
+          envFrom:
+            - secretRef:
+                name: neuralbank-env
+          imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: neuralbank-api
+spec:
+  selector:
+    app: neuralbank-api
+  ports:
+    - port: 80
+      targetPort: 8000
+  type: NodePort

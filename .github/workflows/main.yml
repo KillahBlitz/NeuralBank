@@ -1,0 +1,95 @@
+# .github/workflows/main.yml
+name: Build & Deploy NeuralBank
+
+on:
+  push:
+    branches: [main]
+
+env:
+  IMAGE: ghcr.io/${{ github.repository_owner }}/neuralbank
+
+jobs:
+  build:
+    name: Build image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build & Push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          tags: |
+            ${{ env.IMAGE }}:latest
+            ${{ env.IMAGE }}:${{ github.sha }}
+
+  # ─────────────────────────────────────────
+  # FASE 2 — Sincronizar .env.neuralbank al cluster
+  # ─────────────────────────────────────────
+  sync-env:
+    name: Sync env to cluster
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > ~/.kube/config
+
+      - name: Crear/actualizar Secret neuralbank-env
+        run: |
+          echo "${{ secrets.ENV_NEURALBANK }}" > .env.neuralbank
+          kubectl create secret generic neuralbank-env \
+            --from-env-file=.env.neuralbank \
+            --dry-run=client -o yaml | kubectl apply -f -
+          rm .env.neuralbank
+
+  deploy:
+    name: Deploy ${{ matrix.service }}
+    needs: sync-env
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        service:
+          - neuralbank-api
+          - neuralbank-producer
+          - neuralbank-image
+          - neuralbank-extractor
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up kubeconfig
+        run: |
+          mkdir -p ~/.kube
+          echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > ~/.kube/config
+
+      - name: Actualizar tag de imagen en manifest
+        run: |
+          sed -i "s|image:.*neuralbank:.*|image: ${{ env.IMAGE }}:${{ github.sha }}|" \
+            kubernetes/${{ matrix.service }}/deployment.yaml
+
+      - name: Apply manifest
+        run: |
+          kubectl apply -f kubernetes/${{ matrix.service }}/deployment.yaml
+
+      - name: Wait for rollout
+        run: |
+          kubectl rollout status deployment/${{ matrix.service }} --timeout=120s

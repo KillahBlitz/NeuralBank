@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: neuralbank-image
+  name: neuralbank-producer
   labels:
-    app: neuralbank-image
+    app: neuralbank-producer
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: neuralbank-image
+      app: neuralbank-producer
   template:
     metadata:
       labels:
-        app: neuralbank-image
+        app: neuralbank-producer
     spec:
       containers:
-        - name: neuralbank-image
+        - name: neuralbank-producer
           image: ghcr.io/<OWNER>/neuralbank:latest
-          command: ["python", "src/tasks/image_event_handler.py"]
+          command: ["python", "src/tasks/event_producer.py"]
           envFrom:
             - secretRef:
                 name: neuralbank-env
-          imagePullPolicy: Alway
+          imagePullPolicy: Always
