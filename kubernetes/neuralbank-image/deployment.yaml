@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: neuralbank-image
-          image: ghcr.io/KillahBlitz/neuralbank:latest
+          image: ghcr.io/KillahBlitz/NeuralBank:latest
           command: ["python", "src/tasks/image_event_handler.py"]
           envFrom:
             - secretRef:

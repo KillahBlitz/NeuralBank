@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: neuralbank-producer
-          image: ghcr.io/KilahBlitz/neuralbank:latest
+          image: ghcr.io/KilahBlitz/NeuralBank:latest
           command: ["python", "src/tasks/event_producer.py"]
           envFrom:
             - secretRef:
