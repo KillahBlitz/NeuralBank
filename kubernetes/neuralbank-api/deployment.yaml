@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: neuralbank-api
-          image: ghcr.io/<OWNER>/neuralbank:latest
+          image: ghcr.io/KillahBlitz/neuralbank:latest
           command: ["uvicorn", "src.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
           ports:
             - containerPort: 8000

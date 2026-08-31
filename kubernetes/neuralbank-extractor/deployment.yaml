@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: neuralbank-extractor
-          image: ghcr.io/<OWNER>/neuralbank:latest
+          image: ghcr.io/KillahBlitz/neuralbank:latest
           command: ["python", "src/tasks/extraction_event_handler.py"]
           envFrom:
             - secretRef:
