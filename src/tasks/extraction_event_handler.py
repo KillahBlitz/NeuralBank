@@ -29,5 +29,5 @@ if __name__ == "__main__":
     while True:
         event = start_redis_consumer(STREAM_NAME, GROUP_NAME, CONSUMER_NAME)
         if event:
-            task_handler.text_extraction(event)
             print(f"Event received, init process for extraction")
+            task_handler.text_extraction(event)
