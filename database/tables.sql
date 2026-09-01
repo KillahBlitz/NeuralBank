@@ -35,6 +35,7 @@ CREATE TABLE image_file (
     signature   VARCHAR(64)  NOT NULL,
     page_number INT          NOT NULL,
     uuid_pdf    VARCHAR(40)  NOT NULL,
+    extraction  TEXT,
 
     CONSTRAINT fk_image_file_pdf_file
         FOREIGN KEY (uuid_pdf)

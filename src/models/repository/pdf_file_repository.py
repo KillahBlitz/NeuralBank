@@ -1,3 +1,4 @@
+from datetime import datetime
 from sqlalchemy import Column, String, Integer, DateTime, Enum as SAEnum, BigInteger
 
 
@@ -48,3 +49,22 @@ class PDFFileRepository:
             self.db.commit()
             self.db.refresh(record)
         return record
+
+    def get_files_list(self, start_date: datetime, end_date: datetime):
+        data = []
+        records = self.db.query(PDFFileUploadRecord).filter(
+            PDFFileUploadRecord.upload_at >= start_date,
+            PDFFileUploadRecord.upload_at <= end_date).all()
+
+        for record in records:
+            new_record = {}
+            new_record["uuid"] = record.uuid
+            new_record["upload_at"] = record.upload_at
+            new_record["file_name"] = record.file_name
+            new_record["status"] = record.status.value
+            new_record["file_size"] = record.file_size
+            new_record["pages"] = record.pages
+            data.append(new_record)
+        return data
+
+        

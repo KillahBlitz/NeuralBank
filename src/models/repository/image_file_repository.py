@@ -42,3 +42,16 @@ class ImageFileRepository:
         self.get_image_file_by_uuid(uuid).extraction = text
         self.db.commit()
 
+    def get_images_by_file_uuid(self, file_uuid: str):
+        data = []
+        record = {}
+        records = self.db.query(ImageFileRecord).filter(ImageFileRecord.uuid_pdf == file_uuid).all()
+        for r in records:
+            record["file_bytes"] = r.file_bytes
+            record["page"] = r.page_number
+            record["uuid_pdf"] = r.uuid_pdf
+            record["extraction"] = r.extraction
+            data.append(record)
+        return data
+    
+
