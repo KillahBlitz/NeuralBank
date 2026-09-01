@@ -39,7 +39,8 @@ class ImageFileRepository:
         return self.db.query(ImageFileRecord).filter(ImageFileRecord.uuid == uuid).first()
 
     def update_image_file(self, uuid, text) -> None:
-        self.get_image_file_by_uuid(uuid).extraction = text
+        record = self.db.query(ImageFileRecord).filter(ImageFileRecord.uuid == uuid).first()
+        record.extraction = text
         self.db.commit()
 
     def get_images_by_file_uuid(self, file_uuid: str):

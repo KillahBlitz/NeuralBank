@@ -55,16 +55,15 @@ class PDFFileRepository:
         records = self.db.query(PDFFileUploadRecord).filter(
             PDFFileUploadRecord.upload_at >= start_date,
             PDFFileUploadRecord.upload_at <= end_date).all()
-
         for record in records:
-            new_record = {}
-            new_record["uuid"] = record.uuid
-            new_record["upload_at"] = record.upload_at
-            new_record["file_name"] = record.file_name
-            new_record["status"] = record.status.value
-            new_record["file_size"] = record.file_size
-            new_record["pages"] = record.pages
-            data.append(new_record)
+            data.append({
+                "uuid": record.uuid,
+                "upload_at": record.upload_at,
+                "file_name": record.file_name,
+                "status": record.status.value,
+                "file_size": record.file_size,
+                "pages": record.pages,
+            })
         return data
 
         
