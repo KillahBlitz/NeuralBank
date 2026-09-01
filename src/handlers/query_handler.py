@@ -29,3 +29,9 @@ class QueryHandler:
 
     def get_images_by_uuid_file(self, file_uuid: str):
         return self._image_file_repository.get_images_by_file_uuid(file_uuid)
+
+    def get_image_by_uuid_and_page(self, file_uuid: str, page: int):
+        return self._image_file_repository.get_image_by_file_uuid_and_page(file_uuid, page)
+
+    def count_pages_by_file_uuid(self, file_uuid: str) -> int:
+        return self._image_file_repository.count_pages_by_file_uuid(file_uuid)

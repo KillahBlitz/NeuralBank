@@ -2,7 +2,7 @@ from handlers.command_handler import CommandHandler
 from handlers.query_handler import QueryHandler
 from models.request.get_files_list_request import GetFilesListRequest
 from models.response.get_files_list_response import GetFilesResponse, GetFilesListResponse
-from models.response.get_images_response import GetImageResponse, GetImagesListResponse
+from models.response.get_images_response import GetImageResponse, GetImagesListResponse, GetImagePageResponse
 
 class QueryDataHandler:
     def __init__(self):
@@ -27,3 +27,9 @@ class QueryDataHandler:
             data.append(GetImageResponse(**image))
         response = GetImagesListResponse(files_list=data)
         return response
+
+    async def get_image_page(self, file_uuid: str, page: int):
+        total = self._qh.count_pages_by_file_uuid(file_uuid)
+        image = self._qh.get_image_by_uuid_and_page(file_uuid, page)
+        page_data = GetImageResponse(**image) if image else None
+        return GetImagePageResponse(total_pages=total, page=page_data)

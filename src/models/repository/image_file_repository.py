@@ -44,14 +44,31 @@ class ImageFileRepository:
 
     def get_images_by_file_uuid(self, file_uuid: str):
         data = []
-        record = {}
-        records = self.db.query(ImageFileRecord).filter(ImageFileRecord.uuid_pdf == file_uuid).all()
+        records = self.db.query(ImageFileRecord).filter(ImageFileRecord.uuid_pdf == file_uuid).order_by(ImageFileRecord.page_number).all()
         for r in records:
-            record["file_bytes"] = r.file_bytes
-            record["page"] = r.page_number
-            record["uuid_pdf"] = r.uuid_pdf
-            record["extraction"] = r.extraction
-            data.append(record)
+            data.append({
+                "file_bytes": r.file_bytes,
+                "page": r.page_number,
+                "uuid_pdf": r.uuid_pdf,
+                "extraction": r.extraction,
+            })
         return data
+
+    def get_image_by_file_uuid_and_page(self, file_uuid: str, page: int):
+        r = self.db.query(ImageFileRecord).filter(
+            ImageFileRecord.uuid_pdf == file_uuid,
+            ImageFileRecord.page_number == page,
+        ).first()
+        if not r:
+            return None
+        return {
+            "file_bytes": r.file_bytes,
+            "page": r.page_number,
+            "uuid_pdf": r.uuid_pdf,
+            "extraction": r.extraction,
+        }
+
+    def count_pages_by_file_uuid(self, file_uuid: str) -> int:
+        return self.db.query(ImageFileRecord).filter(ImageFileRecord.uuid_pdf == file_uuid).count()
     
 

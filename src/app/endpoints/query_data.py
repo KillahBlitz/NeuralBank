@@ -11,8 +11,8 @@ async def upload_file(filters: Annotated[GetFilesListRequest, "Filters for the q
     response = await qdh.get_files_list(filters)
     return response
 
-@router.get("/{file_uuid}")
-async def get_images_from_file(file_uuid: str):
+@router.get("/{file_uuid}/page/{page}")
+async def get_image_page(file_uuid: str, page: int):
     qdh = QueryDataHandler()
-    response = await qdh.get_images_from_file(file_uuid)
+    response = await qdh.get_image_page(file_uuid, page)
     return response

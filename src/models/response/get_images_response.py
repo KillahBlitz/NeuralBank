@@ -15,3 +15,7 @@ class GetImageResponse(BaseModel):
 
 class GetImagesListResponse(BaseModel):
     files_list: List[GetImageResponse]
+
+class GetImagePageResponse(BaseModel):
+    total_pages: int
+    page: GetImageResponse | None
